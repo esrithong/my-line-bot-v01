@@ -4,6 +4,13 @@ from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, TextMessage, TextSendMessage,)
 from __future__ import unicode_literals
 
+import datetime
+import errno
+import json
+import os
+import sys
+import tempfile
+
 app = Flask(__name__)
 # line_bot_api = Channel access token
 # handler = Channel secret
