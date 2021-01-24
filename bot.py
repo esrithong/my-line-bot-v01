@@ -33,19 +33,19 @@ def webhook():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
-    #line_bot_api.reply_message(
-    #    event.reply_token,
-    #    TextSendMessage(text=event.message.text))
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=event.message.text))
     
-   text = event.message.text
+   #text = event.message.text
     
-   if text == 'พยากรณ์อากาศ':
-       quota = line_bot_api.get_message_quota()
-       line_bot_api.reply_message(
-            event.reply_token, [
-                TextSendMessage(text='กรุณาระบุจังหวัดและอำเภอที่ต้องการทราบ'),
-            ]
-       )
+   #if text == 'พยากรณ์อากาศ':
+    #   quota = line_bot_api.get_message_quota()
+     #  line_bot_api.reply_message(
+      #      event.reply_token, [
+       #         TextSendMessage(text='กรุณาระบุจังหวัดและอำเภอที่ต้องการทราบ'),
+        #    ]
+      # )
     
     
 if __name__ == "__main__":
