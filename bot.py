@@ -38,9 +38,9 @@ def handle_text_message(event):
    if text == 'พยากรณ์อากาศ':
        quota = line_bot_api.get_message_quota()
        line_bot_api.reply_message(
-            event.reply_token, [
+            event.reply_token, #[
                 TextSendMessage(text='กรุณาระบุจังหวัดและอำเภอที่ต้องการทราบ'),
-            ]
+            #]
        )
     else line_bot_api.reply_message(
         event.reply_token,
