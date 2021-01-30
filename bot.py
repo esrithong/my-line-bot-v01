@@ -62,7 +62,7 @@ def handle_text_message(event):
         
         
         url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
-
+"""
         querystring = {"province":u"นครปฐม", "amphoe":u"เมืองนครปฐม", "fields":"tc, rh, rain, ws10m"}
 
         headers = {
@@ -71,7 +71,7 @@ def handle_text_message(event):
         }
         data = requests.request("GET", url, headers=headers, params=querystring).json()
         #print (data)
-"""
+
 
         prov = data['WeatherForecasts'][0]['location']['province']
         lat  = data['WeatherForecasts'][0]['location']['lat']
