@@ -60,19 +60,17 @@ def handle_text_message(event):
         #amp = t[1]
         #print(prov , amp)
         
-        prov = "นครปฐม"
-        amp = "อำเภอ"
         
         url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
 
-        querystring = {"province":prov, "amphoe":amp, "fields":"tc, rh, rain, ws10m"}
+        querystring = {"province":"นครปฐม", "amphoe":"อำเภอ", "fields":"tc, rh, rain, ws10m"}
 
         headers = {
             'accept': "application/json",
             'authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjNlMTFlZmNiNDhhYzYzNTA3NjRkMzE4OGE4Yjk4ZTBkM2NiNTU5NTIxMTQxOThiYzU3MzJiMDA0ZTg4MTBkZmQ2ZTY1MjQyMzQxNjJjNjFlIn0.eyJhdWQiOiIyIiwianRpIjoiM2UxMWVmY2I0OGFjNjM1MDc2NGQzMTg4YThiOThlMGQzY2I1NTk1MjExNDE5OGJjNTczMmIwMDRlODgxMGRmZDZlNjUyNDIzNDE2MmM2MWUiLCJpYXQiOjE1NzcwODYyNDMsIm5iZiI6MTU3NzA4NjI0MywiZXhwIjoxNjA4NzA4NjQzLCJzdWIiOiI2ODEiLCJzY29wZXMiOltdfQ.Q2QVxHiGf9L-mEAk_dwTdjtoaoseSYBRW6M-OqdSYwCtVH5qKCq01LO6iBlz1mWvkkoaWy2-tzXInF5sPHxSMqAAsbZQnQ-0G4jnaQ1WDFE02rl2a92pgroLn99X2BrX2K_3kvEOgHymt0-AUXQ8DWH5vwwsLwB9oAa5KN6C7d2p4voNjhiN0a2hAJG0lFp2v-sDPQvqvZdH5taUZV-hGPrD-3mCYEjh6yPdepaBKBbHfyXOtjCskeyQUZ40qA989SbK7-3YvF4ZIe9RZIeLUYfrLbZnjDPeERWJRoaBIs7nVg1FzAc19v7aBMfo30ytLtNbXcQN42u2GQDN1wuDt5H_Hvac0e4gYuAevvJeumO2XJUO-aaR6eh5wD0ksEq1deeCm5bFGzaISdDscmCFkPxxDjy0_OD2qpz7rs97DLmfke6ihQYX1lLnYTi5QNKBQl7XEyWbU-2Rg17G2QRo1ufNMOOjedv9nBCbvBn3RBACR3G-nEVUbo8sQk8NoS9sYNzyKFcEBkyOXJ8W4vKF9u0Z0x24xyUbYXwjRmvTLq8EJGHrVu3gJs2IE1Y51ba019aJbNnsLrac1TrO2HF4NilDWc0K4k3f6UqyhBM2AInp7hpbRmRT1xnnGXxR0qE5EXzqpEaqEZ0r0XV8r8Zvf0D4l9F2XIQCcAa2p9zOFw4",
         }
         data = requests.request("GET", url, headers=headers, params=querystring).json()
-        print (data)
+        #print (data)
 
 
         prov = data['WeatherForecasts'][0]['location']['province']
