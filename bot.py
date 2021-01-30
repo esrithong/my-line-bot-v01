@@ -39,14 +39,14 @@ def handle_text_message(event):
     
    text = event.message.text
     
-   if text == 'พยากรณ์อากาศ':
+   if text == 'พยากรณ์อากาศ':"""
        #quota = line_bot_api.get_message_quota()
        line_bot_api.reply_message(
             event.reply_token, [
                 TextSendMessage(text='กรุณาระบุจังหวัดและอำเภอที่ต้องการทราบ'),
             ]
        )
-"""   
+   
     elif text == 'นครปฐม เมืองนครปฐม':
         #quota = line_bot_api.get_message_quota()
         #import requests
