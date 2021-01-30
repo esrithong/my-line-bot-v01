@@ -59,7 +59,7 @@ def handle_text_message(event):
         #prov = t[0]
         #amp = t[1]
         #print(prov , amp)
-"""        
+        
         
         url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
 
@@ -81,7 +81,7 @@ def handle_text_message(event):
         rain = data['WeatherForecasts'][0]['forecasts'][0]['data']['rain']
         wind = data['WeatherForecasts'][0]['forecasts'][0]['data']['ws10m']
         time = data['WeatherForecasts'][0]['forecasts'][0]['time']
-
+"""
        
         line_bot_api.reply_message(
             event.reply_token, [
