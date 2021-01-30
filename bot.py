@@ -59,10 +59,10 @@ def handle_text_message(event):
         #prov = t[0]
         #amp = t[1]
         #print(prov , amp)
-        
+ """       
         
         url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
-"""
+
         querystring = {"province":u"นครปฐม", "amphoe":u"เมืองนครปฐม", "fields":"tc, rh, rain, ws10m"}
 
         headers = {
