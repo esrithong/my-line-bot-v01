@@ -46,7 +46,7 @@ def handle_text_message(event):
                 TextSendMessage(text='กรุณาระบุจังหวัดและอำเภอที่ต้องการทราบ'),
             ]
        )
-   """
+   
     elif text == 'นครปฐม เมืองนครปฐม':
         #quota = line_bot_api.get_message_quota()
         #import requests
@@ -71,7 +71,7 @@ def handle_text_message(event):
         }
         data = requests.request("GET", url, headers=headers, params=querystring).json()
         #print (data)
-
+"""
 
         prov = data['WeatherForecasts'][0]['location']['province']
         lat  = data['WeatherForecasts'][0]['location']['lat']
@@ -92,8 +92,8 @@ def handle_text_message(event):
                 TextSendMessage(text='time:'+time)
             ]
         )
-"""
-        
+
+"""        
         
 if __name__ == "__main__":
     app.run()
