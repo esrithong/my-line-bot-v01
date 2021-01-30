@@ -39,14 +39,14 @@ def handle_text_message(event):
     
    text = event.message.text
     
-   if text == 'พยากรณ์อากาศ':"""
+   if text == 'พยากรณ์อากาศ':
        #quota = line_bot_api.get_message_quota()
        line_bot_api.reply_message(
             event.reply_token, [
                 TextSendMessage(text='กรุณาระบุจังหวัดและอำเภอที่ต้องการทราบ'),
             ]
        )
-   
+"""   
     elif text == 'นครปฐม เมืองนครปฐม':
         #quota = line_bot_api.get_message_quota()
         #import requests
@@ -59,7 +59,7 @@ def handle_text_message(event):
         #prov = t[0]
         #amp = t[1]
         #print(prov , amp)
-        
+"""        
         
         url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
 
@@ -93,7 +93,7 @@ def handle_text_message(event):
             ]
         )
 
-"""        
+        
         
 if __name__ == "__main__":
     app.run()
