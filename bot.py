@@ -46,7 +46,7 @@ def handle_text_message(event):
                 TextSendMessage(text='กรุณาระบุจังหวัดและอำเภอที่ต้องการทราบ'),
             ]
        )
-   
+ """  
     elif text == 'นครปฐม เมืองนครปฐม':
         #quota = line_bot_api.get_message_quota()
         #import requests
@@ -59,7 +59,7 @@ def handle_text_message(event):
         #prov = t[0]
         #amp = t[1]
         #print(prov , amp)
- """       
+        
         
         url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
 
