@@ -49,17 +49,9 @@ def handle_text_message(event):
    
     elif text == 'นครปฐม เมืองนครปฐม':
         #quota = line_bot_api.get_message_quota()
+        
         import requests
         import pandas as pd
-        import warnings
-        warnings.filterwarnings('ignore')
-        #from pythainlp import sent_tokenize, word_tokenize
-        #t = sent_tokenize(text, engine="whitespace")
-        #prov = จังหวัด , amp = อำเภอ
-        #prov = t[0]
-        #amp = t[1]
-        #print(prov , amp)
-        
         
         url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
 
