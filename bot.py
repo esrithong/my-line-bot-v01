@@ -3,6 +3,9 @@ from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, TextMessage, TextSendMessage,)
 
+import requests
+import pandas as pd
+
 app = Flask(__name__)
 # line_bot_api = Channel access token
 # handler = Channel secret
@@ -50,8 +53,7 @@ def handle_text_message(event):
     elif text == 'นครปฐม เมืองนครปฐม':
         #quota = line_bot_api.get_message_quota()
         
-        import requests
-        import pandas as pd
+        
         
         url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
 
