@@ -46,13 +46,13 @@ def handle_text_message(event):
                 TextSendMessage(text='กรุณาระบุจังหวัดและอำเภอที่ต้องการทราบ'),
             ]
        )
-"""   
+   
     elif text == 'นครปฐม เมืองนครปฐม':
         #quota = line_bot_api.get_message_quota()
-        #import requests
-        #import pandas as pd
-        #import warnings
-        #warnings.filterwarnings('ignore')
+        import requests
+        import pandas as pd
+        import warnings
+        warnings.filterwarnings('ignore')
         #from pythainlp import sent_tokenize, word_tokenize
         #t = sent_tokenize(text, engine="whitespace")
         #prov = จังหวัด , amp = อำเภอ
@@ -81,7 +81,7 @@ def handle_text_message(event):
         rain = data['WeatherForecasts'][0]['forecasts'][0]['data']['rain']
         wind = data['WeatherForecasts'][0]['forecasts'][0]['data']['ws10m']
         time = data['WeatherForecasts'][0]['forecasts'][0]['time']
-"""
+
        
         line_bot_api.reply_message(
             event.reply_token, [
