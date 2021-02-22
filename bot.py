@@ -48,7 +48,7 @@ def handle_text_message(event):
             ]
        )
    
-    elif text == 'นครปฐม เมืองนครปฐม':
+   elif text == 'นครปฐม เมืองนครปฐม':
         #quota = line_bot_api.get_message_quota()
         
         import requests
