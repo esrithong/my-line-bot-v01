@@ -1,4 +1,6 @@
-from flask import Flask, request, abort
+import json
+import os
+from flask import Flask, request, abort, make_response
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, TextMessage, TextSendMessage,)
@@ -31,7 +33,7 @@ def webhook():
 
     return 'OK'
     
-
+"""
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     #line_bot_api.reply_message(
@@ -84,8 +86,70 @@ def handle_text_message(event):
                 TextSendMessage(text='time:'+time)
             ]
         )
+"""
 
-        
-        
+def MainFunction():
+
+    #Getting intent from Dailogflow
+    question_from_dailogflow_raw = request.get_json(silent=True, force=True)
+
+    #Call generating_answer function to classify the question
+    answer_from_bot = generating_answer(question_from_dailogflow_raw)
+    
+    #Make a respond back to Dailogflow
+    r = make_response(answer_from_bot)
+    r.headers['Content-Type'] = 'application/json' #Setting Content Type
+
+    return r
+ 
+def generating_answer(question_from_dailogflow_dict):
+
+    #Print intent that recived from dialogflow.
+    print(json.dumps(question_from_dailogflow_dict, indent=4 ,ensure_ascii=False))
+
+    #Getting intent name form intent that recived from dialogflow.
+    intent_group_question_str = question_from_dailogflow_dict["queryResult"]["intent"]["displayName"] 
+
+    #Select function for answering question
+    if intent_group_question_str == 'พยากรณ์อากาศ - ระบุจังหวัดและอำเภอ':
+        answer_str = weather_forecast(question_from_dailogflow_dict)
+    else: answer_str = "กรุณากรอกจังหวัดตามด้วยอำเภอที่ต้องการทราบให้ถูกต้องค่ะ"
+
+    #Build answer dict 
+    answer_from_bot = {"fulfillmentText": answer_str}
+    
+    #Convert dict to JSON
+    answer_from_bot = json.dumps(answer_from_bot, indent=4) 
+    
+    return answer_from_bot
+
+def weather_forecast(respond_dict): #พยากรณ์อากาศ
+    import requests
+    import pandas as pd
+    url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
+    
+    prov = float(respond_dict["queryResult"]["outputContexts"][2]["parameters"]["province.original"])
+    amp = float(respond_dict["queryResult"]["outputContexts"][2]["parameters"]["amphoe.original"])
+    
+    querystring = {"province":u"prov", "amphoe":u"amp", "fields":"tc, rh, rain, ws10m"}
+
+    headers = {
+        'accept': "application/json",
+        'authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjMxZTY0MDU0NzFlOTBhY2E0ZDE4NTJmNWY3MjBmNzlkZDEyYWJlZWM2MmY0YzcyNDk4YjE0ZmFlZjFiMzcyNDZkMWE2OWFlN2U1Y2FiY2QyIn0.eyJhdWQiOiIyIiwianRpIjoiMzFlNjQwNTQ3MWU5MGFjYTRkMTg1MmY1ZjcyMGY3OWRkMTJhYmVlYzYyZjRjNzI0OThiMTRmYWVmMWIzNzI0NmQxYTY5YWU3ZTVjYWJjZDIiLCJpYXQiOjE2MTIwMDkzNzEsIm5iZiI6MTYxMjAwOTM3MSwiZXhwIjoxNjQzNTQ1MzcxLCJzdWIiOiI2ODEiLCJzY29wZXMiOltdfQ.WYE4mH6RVRO2el2rxgbtr1TxmTgxRS3N9147P1M889k9Ds2H4VIXrO6SbljNn_JB_yohEZ2QIYN-DfUQvipjY5LBs-iJCV9V0PT-DdmLL6fRw2zVVtaoDA_PzrJWmMurQTcmlaDPsNDGPwK3INESW5-5ZMg0Ssp4IGzGi2CFgfe_3rva4_pa64gCBd4GeKVwrLqaO_ds-8787pwsAMhA8EO61qCL4AX1H7WYis86RO4nAquqTq6OyJ-zoOyokQHfYbDfcYo5GrZCISGr9HwtwbKhbou3XQh2fKjXAJMuIyjYwkXfwaifDAYmWc-mSYyEWPWgjmFzbCfzV65EEJtHRydGZsXpFyHPzbcdfKuAYQxfMbZ8l8YTxs22wRNqNkz6TPJlJMeQ7Cr_J_SUYDFgv4xNPqRpoVemjUZF2rCx7TyObPBewrsLzkUQ66OvAr5afadlZsgBstu-8l-lx57JmveMALLEWbfSpBcY89_a36kaxDUontS0n1W53EEyd-8Wxwj9FE02LVDfxt6Clb6dJtF9tfV8QdbMYHUErCMhMbniyyUwcU44FRfrbWSL7qyf6Q_wwwk34dYfliqGbhC5yJEByQ6vM3uz8E_KQeEjQtbyMHxU2TMPyX3YWc3dTHDnPfFDRSozI7rbmqC4fbz6aoFs5hZQfoSuo4cViM0G0Qc",
+    }
+    data = requests.request("GET", url, headers=headers, params=querystring).json()
+    prov = data['WeatherForecasts'][0]['location']['province']
+    lat  = data['WeatherForecasts'][0]['location']['lat']
+    lon  = data['WeatherForecasts'][0]['location']['lon']
+    temp = data['WeatherForecasts'][0]['forecasts'][0]['data']['tc']
+    humi = data['WeatherForecasts'][0]['forecasts'][0]['data']['rh']
+    rain = data['WeatherForecasts'][0]['forecasts'][0]['data']['rain']
+    wind = data['WeatherForecasts'][0]['forecasts'][0]['data']['ws10m']
+    time = data['WeatherForecasts'][0]['forecasts'][0]['time']    
+    
+    answer_function = 'พยากรณ์อากาศในจังหวัด ' + prov + 'อำเภอ ' + amp + 'อุณหภูมิ '+"%.2f"%temp + 'ความชื้น '+"%.2f"%humi + 'ปริมาณฝน'+"%.2f"%rain + 'ความเร็วลม'+"%.2f"%wind + 'time:'+time
+    return answer_function
+
+
 if __name__ == "__main__":
     app.run()
