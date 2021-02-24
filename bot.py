@@ -128,8 +128,8 @@ def weather_forecast(respond_dict): #พยากรณ์อากาศ
     import pandas as pd
     url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
     
-    prov = (respond_dict["queryResult"]["outputContexts"]["parameters"]["province.original"])
-    amp = (respond_dict["queryResult"]["outputContexts"]["parameters"]["amphoe.original"])
+    prov = String(respond_dict["queryResult"]["outputContexts"]["parameters"][2]["province"])
+    amp = String(respond_dict["queryResult"]["outputContexts"]["parameters"][2]["amphoe"])
     
     querystring = {"province":u"prov", "amphoe":u"amp", "fields":"tc, rh, rain, ws10m"}
 
