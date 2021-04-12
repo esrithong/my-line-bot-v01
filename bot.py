@@ -13,7 +13,7 @@ line_bot_api = LineBotApi('4OPjwBiZQWRlAmGTII1pdeLdygBdE7fBW9hkdsZ8t3SaJ/fnkCYEn
 handler = WebhookHandler('501aad4d05afc7da48e8c5400c2f61e1')
 
 @app.route("/")
-def hello():
+def hell():
     return "Hello World!"
 
 @app.route("/webhook", methods=['POST'])
