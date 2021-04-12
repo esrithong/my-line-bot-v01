@@ -36,7 +36,7 @@ def webhook():
 def MainFunction():
 
     #Getting intent from Dailogflow
-    question_from_dailogflow_raw = request.get_json(silent=True, force=True)
+    #question_from_dailogflow_raw = request.get_json(silent=True, force=True)
 
     #Call generating_answer function to classify the question
     answer_from_bot = 'a'
