@@ -36,11 +36,10 @@ def webhook():
 def MainFunction():
 
     #Getting intent from Dailogflow
-    #question_from_dailogflow_raw = request.get_json(silent=True, force=True)
+    question_from_dailogflow_raw = request.get_json(silent=True, force=True)
 
     #Call generating_answer function to classify the question
-    answer_from_bot = 'a'
-    #generating_answer(question_from_dailogflow_raw)
+    answer_from_bot = generating_answer(question_from_dailogflow_raw)
     
     #Make a respond back to Dailogflow
     r = make_response(answer_from_bot)
@@ -58,7 +57,8 @@ def generating_answer(question_from_dailogflow_dict):
 
     #Select function for answering question
     if intent_group_question_str == 'พยากรณ์อากาศ - ระบุจังหวัดและอำเภอ':
-        answer_str = weather_forecast(question_from_dailogflow_dict)
+        answer_str = testAns()
+        #answer_str = weather_forecast(question_from_dailogflow_dict)
     else: answer_str = "กรุณากรอกจังหวัดตามด้วยอำเภอที่ต้องการทราบให้ถูกต้องค่ะ"
 
     #Build answer dict 
@@ -69,7 +69,12 @@ def generating_answer(question_from_dailogflow_dict):
     
     return answer_from_bot
 
+def testAns():
+    answer_function = 'passTest'
+    return answer_function
+
 def weather_forecast(respond_dict): #พยากรณ์อากาศ
+    
     import requests
     import pandas as pd
     url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
