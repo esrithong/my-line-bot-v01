@@ -5,7 +5,6 @@ from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (MessageEvent, TextMessage, TextSendMessage,)
 
-
 app = Flask(__name__)
 # line_bot_api = Channel access token
 # handler = Channel secret
@@ -13,7 +12,7 @@ line_bot_api = LineBotApi('4OPjwBiZQWRlAmGTII1pdeLdygBdE7fBW9hkdsZ8t3SaJ/fnkCYEn
 handler = WebhookHandler('501aad4d05afc7da48e8c5400c2f61e1')
 
 @app.route("/")
-def hell():
+def hello():
     return "Hello World!"
 
 @app.route("/webhook", methods=['POST'])
@@ -46,7 +45,7 @@ def MainFunction():
     r.headers['Content-Type'] = 'application/json' #Setting Content Type
 
     return r
- 
+
 def generating_answer(question_from_dailogflow_dict):
 
     #Print intent that recived from dialogflow.
@@ -56,10 +55,11 @@ def generating_answer(question_from_dailogflow_dict):
     intent_group_question_str = question_from_dailogflow_dict["queryResult"]["intent"]["displayName"] 
 
     #Select function for answering question
-    if intent_group_question_str == 'พยากรณ์อากาศ - ระบุจังหวัดและอำเภอ':
-        answer_str = testAns()
-        #answer_str = weather_forecast(question_from_dailogflow_dict)
-    else: answer_str = "กรุณากรอกจังหวัดตามด้วยอำเภอที่ต้องการทราบให้ถูกต้องค่ะ"
+    if intent_group_question_str == 'กินอะไรดี':
+        answer_str = menu_recormentation()
+    elif intent_group_question_str == 'BMI - Confirmed W and H': 
+        answer_str = BMI_calculation(question_from_dailogflow_dict)
+    else: answer_str = "ผมไม่เข้าใจ คุณต้องการอะไร"
 
     #Build answer dict 
     answer_from_bot = {"fulfillmentText": answer_str}
@@ -69,38 +69,30 @@ def generating_answer(question_from_dailogflow_dict):
     
     return answer_from_bot
 
-def testAns():
-    answer_function = 'passTest'
+def menu_recormentation(): #Function for recommending menu
+    menu_name = 'สุกี้แห้ง'
+    answer_function = menu_name + ' สิ น่ากินนะ'
     return answer_function
 
-def weather_forecast(respond_dict): #พยากรณ์อากาศ
-    
-    import requests
-    import pandas as pd
-    url = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/place"
-    
-    prov = String(respond_dict["queryResult"]["outputContexts"]["parameters"][2]["province"])
-    amp = String(respond_dict["queryResult"]["outputContexts"]["parameters"][2]["amphoe"])
-    
-    querystring = {"province":u"prov", "amphoe":u"amp", "fields":"tc, rh, rain, ws10m"}
+def BMI_calculation(respond_dict): #Function for calculating BMI
 
-    headers = {
-        'accept': "application/json",
-        'authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjMxZTY0MDU0NzFlOTBhY2E0ZDE4NTJmNWY3MjBmNzlkZDEyYWJlZWM2MmY0YzcyNDk4YjE0ZmFlZjFiMzcyNDZkMWE2OWFlN2U1Y2FiY2QyIn0.eyJhdWQiOiIyIiwianRpIjoiMzFlNjQwNTQ3MWU5MGFjYTRkMTg1MmY1ZjcyMGY3OWRkMTJhYmVlYzYyZjRjNzI0OThiMTRmYWVmMWIzNzI0NmQxYTY5YWU3ZTVjYWJjZDIiLCJpYXQiOjE2MTIwMDkzNzEsIm5iZiI6MTYxMjAwOTM3MSwiZXhwIjoxNjQzNTQ1MzcxLCJzdWIiOiI2ODEiLCJzY29wZXMiOltdfQ.WYE4mH6RVRO2el2rxgbtr1TxmTgxRS3N9147P1M889k9Ds2H4VIXrO6SbljNn_JB_yohEZ2QIYN-DfUQvipjY5LBs-iJCV9V0PT-DdmLL6fRw2zVVtaoDA_PzrJWmMurQTcmlaDPsNDGPwK3INESW5-5ZMg0Ssp4IGzGi2CFgfe_3rva4_pa64gCBd4GeKVwrLqaO_ds-8787pwsAMhA8EO61qCL4AX1H7WYis86RO4nAquqTq6OyJ-zoOyokQHfYbDfcYo5GrZCISGr9HwtwbKhbou3XQh2fKjXAJMuIyjYwkXfwaifDAYmWc-mSYyEWPWgjmFzbCfzV65EEJtHRydGZsXpFyHPzbcdfKuAYQxfMbZ8l8YTxs22wRNqNkz6TPJlJMeQ7Cr_J_SUYDFgv4xNPqRpoVemjUZF2rCx7TyObPBewrsLzkUQ66OvAr5afadlZsgBstu-8l-lx57JmveMALLEWbfSpBcY89_a36kaxDUontS0n1W53EEyd-8Wxwj9FE02LVDfxt6Clb6dJtF9tfV8QdbMYHUErCMhMbniyyUwcU44FRfrbWSL7qyf6Q_wwwk34dYfliqGbhC5yJEByQ6vM3uz8E_KQeEjQtbyMHxU2TMPyX3YWc3dTHDnPfFDRSozI7rbmqC4fbz6aoFs5hZQfoSuo4cViM0G0Qc",
-    }
-    data = requests.request("GET", url, headers=headers, params=querystring).json()
-    prov = data['WeatherForecasts'][0]['location']['province']
-    lat  = data['WeatherForecasts'][0]['location']['lat']
-    lon  = data['WeatherForecasts'][0]['location']['lon']
-    temp = data['WeatherForecasts'][0]['forecasts'][0]['data']['tc']
-    humi = data['WeatherForecasts'][0]['forecasts'][0]['data']['rh']
-    rain = data['WeatherForecasts'][0]['forecasts'][0]['data']['rain']
-    wind = data['WeatherForecasts'][0]['forecasts'][0]['data']['ws10m']
-    time = data['WeatherForecasts'][0]['forecasts'][0]['time']    
+    #Getting Weight and Height
+    weight_kg = float(respond_dict["queryResult"]["outputContexts"][2]["parameters"]["Weight.original"])
+    height_cm = float(respond_dict["queryResult"]["outputContexts"][2]["parameters"]["Height.original"])
     
-    answer_function = 'พยากรณ์อากาศในจังหวัด ' + prov + 'อำเภอ ' + amp + 'อุณหภูมิ '+"%.2f"%temp + 'ความชื้น '+"%.2f"%humi + 'ปริมาณฝน'+"%.2f"%rain + 'ความเร็วลม'+"%.2f"%wind + 'time:'+time
+    #Calculating BMI
+    BMI = weight_kg/(height_cm/100)**2
+    if BMI < 18.5 :
+        answer_function = "คุณผอมเกินไปนะ"
+    elif 18.5 <= BMI < 23.0:
+        answer_function = "คุณมีนำ้หนักปกติ"
+    elif 23.0 <= BMI < 25.0:
+        answer_function = "คุณมีนำ้หนักเกิน"
+    elif 25.0 <= BMI < 30:
+        answer_function = "คุณอ้วน"
+    else :
+        answer_function = "คุณอ้วนมาก"
     return answer_function
-
 
 if __name__ == "__main__":
     app.run()
