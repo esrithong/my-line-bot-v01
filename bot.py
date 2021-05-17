@@ -16,6 +16,7 @@ def hello():
     return "Hello World!"
 
 @app.route("/webhook", methods=['POST'])
+"""
 def webhook():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
@@ -31,7 +32,7 @@ def webhook():
         abort(400)
 
     return 'OK'
-    
+"""    
 def MainFunction():
 
     #Getting intent from Dailogflow
@@ -95,4 +96,7 @@ def BMI_calculation(respond_dict): #Function for calculating BMI
     return answer_function
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.getenv('PORT', 5000))
+    print("Starting app on port %d" % port)
+    app.run(debug=False, port=port, host='0.0.0.0', threaded=True)
+    #app.run()
