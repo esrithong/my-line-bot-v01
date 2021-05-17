@@ -95,7 +95,7 @@ def BMI_calculation(respond_dict): #Function for calculating BMI
         answer_function = "คุณอ้วนมาก"
     return answer_function
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     print("Starting app on port %d" % port)
     app.run(debug=False, port=port, host='0.0.0.0', threaded=True)
