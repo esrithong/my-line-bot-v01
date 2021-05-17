@@ -16,7 +16,6 @@ def hello():
     return "Hello World!"
 
 @app.route("/webhook", methods=['POST'])
-"""
 def webhook():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
@@ -32,7 +31,7 @@ def webhook():
         abort(400)
 
     return 'OK'
-"""    
+    
 def MainFunction():
 
     #Getting intent from Dailogflow
