@@ -4,14 +4,13 @@ from flask import Flask
 from flask import request
 from flask import make_response
 
-app = Flask(__name__)
-
-line_bot_api = LineBotApi('4OPjwBiZQWRlAmGTII1pdeLdygBdE7fBW9hkdsZ8t3SaJ/fnkCYEnJzC24mD0bBZtdEAM5UxZ7egUEAf7gjmQHLUUz8Lv4cjGwC3OZ/vAJmuXW1YYP/yvNo08cgrC0ZqOHB5aB0QC2n3g6DiCZFtkgdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('501aad4d05afc7da48e8c5400c2f61e1')
 
 # Flask
 app = Flask(__name__)
 @app.route('/', methods=['POST']) #Using post as a method
+
+line_bot_api = LineBotApi('4OPjwBiZQWRlAmGTII1pdeLdygBdE7fBW9hkdsZ8t3SaJ/fnkCYEnJzC24mD0bBZtdEAM5UxZ7egUEAf7gjmQHLUUz8Lv4cjGwC3OZ/vAJmuXW1YYP/yvNo08cgrC0ZqOHB5aB0QC2n3g6DiCZFtkgdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('501aad4d05afc7da48e8c5400c2f61e1')
 
 def MainFunction():
 
