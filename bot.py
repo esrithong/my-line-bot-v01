@@ -1,14 +1,7 @@
-import json
-import os
-
-from flask import Flask
-from flask import request
-from flask import make_response
-
-import linebot
-from linebot.models import *
-from linebot import *
+from flask import Flask, request, abort
 from linebot import (LineBotApi, WebhookHandler)
+from linebot.exceptions import (InvalidSignatureError)
+from linebot.models import (MessageEvent, TextMessage, TextSendMessage,)
 
 # line_bot_api = Channel access token
 # handler = Channel secret
