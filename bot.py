@@ -1,43 +1,80 @@
-from flask import Flask, request, abort
-from linebot import (LineBotApi, WebhookHandler)
-from linebot.exceptions import (InvalidSignatureError)
-from linebot.models import (MessageEvent, TextMessage, TextSendMessage,)
+import json
+import os
 
-# line_bot_api = Channel access token
-# handler = Channel secret
+from flask import Flask
+from flask import request
+from flask import make_response
+
+import linebot
+from linebot.models import *
+from linebot import *
+from linebot import (LineBotApi, WebhookHandler)
+'''
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+'''
 line_bot_api = LineBotApi('ZdDlzPzU2/VBLtW7GCdJq9VFW61tDUXtTKnLJdSLgswx1oS0FODSgBSxpvdIASb2WhmetKizcWP7Rm7VwsGudUgZ8w69PuspqMP3Elauwuz5M4IEqnYCgKDQ1f3UD8fvNnMVlaW3mf8aRJU/nGnTkAdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('cb489aedab482e519846c563f4cad0ca')
-
+'''
+cred = credentials.Certificate("nogizaka46-chatbot-scca-firebase-adminsdk-p2ju8-b011e4f89b.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+'''
 app = Flask(__name__)
 
-
-@app.route("/")
+@app.route('/')
 def hello():
-    return "Hello World!"
+    return 'Hello'
 
-@app.route("/webhook", methods=['POST'])
+
+@app.route('/webhook', methods=['POST'])
 def webhook():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
 
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+    req = request.get_json(silent=True, force=True)
+    res = processRequest(req)
+    res = json.dumps(res, indent=4)
+    r = make_response(res)
+    r.headers['Content-Type'] = 'application/json'
+    return r
 
-    # handle webhook body
-    try:
-        handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
+def processRequest(req):
 
-    return 'OK'
-    
+    # Parsing the POST request body into a dictionary for easy access.
+    req_dict = json.loads(request.data)
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+    # Accessing the fields on the POST request boduy of API.ai invocation of the webhook
+    intent = req_dict["queryResult"]["intent"]["displayName"]
 
-if __name__ == "__main__":
-    app.run()
+    if intent == 'A_Test':
+        speech = 'ทดสอบสำเร็จ Github'
+        '''
+        doc_ref = db.collection(u'Nogizaka46').document(u'A_Test')
+        doc = doc_ref.get().to_dict()
+        print(doc)
+
+        engName = doc['EngName']
+        thName = doc['ThName']
+        speech = f'ชื่อภาษาอังกฤษ คือ  {engName} ชื่อภาษาไทย คือ {thName} ทดสอบสำเร็จ'
+        '''
+
+    else:
+
+        speech = "ทดสอบไม่สำเร็จ"
+
+    res = makeWebhookResult(speech)
+
+    return res
+
+def makeWebhookResult(speech):
+
+    return {
+  "fulfillmentText": speech
+    }
+
+if __name__ == '__main__':
+    port = int(os.getenv('PORT', 5000))
+
+    print("Starting app on port %d" % port)
+
+    app.run(debug=False, port=port, host='0.0.0.0', threaded=True)
