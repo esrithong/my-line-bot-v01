@@ -47,7 +47,7 @@ def processRequest(req):
     intent = req_dict["queryResult"]["intent"]["displayName"]
 
     if intent == 'A_Test':
-        speech = 'ทดสอบสำเร็จ Github'
+        speech = 'ทดสอบสำเร็จ Github !!!!'
         '''
         doc_ref = db.collection(u'Nogizaka46').document(u'A_Test')
         doc = doc_ref.get().to_dict()
